@@ -1,0 +1,248 @@
+{
+  "agent": "claude-opus-4-6",
+  "objective": "Implement a fully functional AI-powered learning chatbot. The agent MUST: (1) search GitHub for a well-designed open-source React chat widget and adapt its code, (2) implement a Django REST API that calls the Anthropic Claude API, and (3) wire everything together in the existing project. All files and code paths are provided explicitly below.",
+
+  "project_context": {
+    "project_root": "c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project",
+    "backend_root": "c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend",
+    "frontend_root": "c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\frontend",
+    "backend_framework": "Django 5.x + Django REST Framework + JWT (rest_framework_simplejwt)",
+    "frontend_framework": "React 18 (create-react-app), axios (via api.js), lucide-react icons, CSS custom properties for theming",
+    "auth_model": "core.User (custom user model), JWT tokens stored in localStorage under key 'tokens' — format: { access, refresh }",
+    "api_base_url": "http://localhost:8000/api",
+    "cors_allowed_origins": ["http://localhost:3000"],
+    "existing_chatbot_app": {
+      "location": "c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend\\chatbot\\",
+      "is_in_INSTALLED_APPS": true,
+      "has_urls_py": false,
+      "views_py_status": "empty (only has 'from django.shortcuts import render')",
+      "models": {
+        "ChatSession": "id(UUID PK), user(FK core.User), course(FK courses.Course nullable), created_at, updated_at — db_table='chat_sessions'",
+        "ChatMessage": "id(UUID PK), session(FK ChatSession), role(USER|BOT), content(TextField), source_lecture(optional str), confidence(optional float), is_helpful(optional bool), created_at — db_table='chat_messages', ordering=['created_at']"
+      }
+    },
+    "existing_main_urls": "backend/backend/urls.py currently has: path('admin/', ...), path('api/', include('core.urls')), path('api/courses/', include('courses.urls'))",
+    "existing_api_js_exports": "authAPI, courseAPI — the chatbotAPI export must be APPENDED to this file",
+    "frontend_css_variables": "--primary (#6366f1), --gray-50 through --gray-900, --radius-md, --radius-lg, --shadow-md",
+    "available_icons_lucide_react": ["MessageCircle", "X", "Send", "Bot", "User", "Loader2", "Sparkles"]
+  },
+
+  "tasks": [
+    {
+      "id": "1",
+      "title": "Backend Setup: Create requirements.txt, install anthropic, configure ANTHROPIC_API_KEY",
+      "priority": "critical",
+      "status": "pending",
+      "description": "The project has no requirements.txt. Create it and ensure the anthropic and python-dotenv packages are available.",
+      "steps": [
+        {
+          "action": "CREATE FILE",
+          "file": "c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend\\requirements.txt",
+          "content": "Django>=5.0\ndjangorestframework>=3.14\ndjangorestframework-simplejwt>=5.3\ndjangorestframework-simplejwt[crypto]>=5.3\ndjango-cors-headers>=4.0\nPillow>=10.0\nanthropic>=0.40.0\npython-dotenv>=1.0\n"
+        },
+        {
+          "action": "MODIFY FILE",
+          "file": "c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend\\backend\\settings.py",
+          "instruction": "At the very top of the file, AFTER 'import os' and AFTER 'from pathlib import Path', insert these two lines:\n\nfrom dotenv import load_dotenv\nload_dotenv()\n\nThen at the very bottom of the file add:\n\n# Anthropic AI API\nANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY', '')"
+        },
+        {
+          "action": "CREATE FILE",
+          "file": "c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend\\.env.example",
+          "content": "ANTHROPIC_API_KEY=sk-ant-your-key-here\nDJANGO_SECRET_KEY=your-secret-key-here\nDJANGO_DEBUG=True\n"
+        },
+        {
+          "action": "SHELL",
+          "command": "cd c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend && pip install anthropic python-dotenv",
+          "note": "Run this to install the packages in the current Python environment"
+        },
+        {
+          "action": "REMIND USER",
+          "message": "⚠️ IMPORTANT: You must create c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend\\.env with your real ANTHROPIC_API_KEY. Example: ANTHROPIC_API_KEY=sk-ant-api03-..."
+        }
+      ]
+    },
+
+    {
+      "id": "2",
+      "title": "Backend: Create chatbot/urls.py and register it in main urls.py",
+      "priority": "critical",
+      "status": "pending",
+      "description": "The chatbot app has no urls.py. Create it, then register it in the main urlconf under /api/chatbot/.",
+      "steps": [
+        {
+          "action": "CREATE FILE",
+          "file": "c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend\\chatbot\\urls.py",
+          "exact_content": "from django.urls import path\nfrom .views import ChatbotMessageView, ChatbotHistoryView\n\nurlpatterns = [\n    path('message/', ChatbotMessageView.as_view(), name='chatbot-message'),\n    path('history/', ChatbotHistoryView.as_view(), name='chatbot-history'),\n]\n"
+        },
+        {
+          "action": "MODIFY FILE",
+          "file": "c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend\\backend\\urls.py",
+          "instruction": "Add path('api/chatbot/', include('chatbot.urls')), to the urlpatterns list. The resulting urlpatterns must be:",
+          "resulting_code": "urlpatterns = [\n    path('admin/', admin.site.urls),\n    path('api/', include('core.urls')),\n    path('api/courses/', include('courses.urls')),\n    path('api/chatbot/', include('chatbot.urls')),\n]\n\nif settings.DEBUG:\n    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)\n"
+        }
+      ]
+    },
+
+    {
+      "id": "3",
+      "title": "Backend: Implement chatbot/views.py with Anthropic Claude API",
+      "priority": "critical",
+      "status": "pending",
+      "description": "Replace the empty chatbot/views.py with a full implementation containing ChatbotMessageView (POST) and ChatbotHistoryView (GET).",
+      "file_to_replace": "c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend\\chatbot\\views.py",
+      "exact_code": "import anthropic\nfrom django.conf import settings\nfrom rest_framework.views import APIView\nfrom rest_framework.response import Response\nfrom rest_framework import status\nfrom rest_framework.permissions import IsAuthenticated\nfrom .models import ChatSession, ChatMessage\n\ntry:\n    from courses.models import Course\n    COURSES_AVAILABLE = True\nexcept ImportError:\n    COURSES_AVAILABLE = False\n\n\nclass ChatbotMessageView(APIView):\n    \"\"\"POST /api/chatbot/message/\n    Body: { message: str, course_id: str (optional slug) }\n    Returns: { reply: str, session_id: str }\n    \"\"\"\n    permission_classes = [IsAuthenticated]\n\n    def post(self, request):\n        message_content = request.data.get('message', '').strip()\n        course_id = request.data.get('course_id', None)\n\n        if not message_content:\n            return Response(\n                {'error': 'Message cannot be empty.'},\n                status=status.HTTP_400_BAD_REQUEST\n            )\n\n        # Resolve course if provided\n        course = None\n        session_filter = {'user': request.user}\n        if course_id and COURSES_AVAILABLE:\n            try:\n                course = Course.objects.get(slug=course_id)\n                session_filter['course'] = course\n            except Course.DoesNotExist:\n                pass\n\n        # Get most recent session or create a new one\n        session = ChatSession.objects.filter(**session_filter).order_by('-updated_at').first()\n        if not session:\n            create_kwargs = {'user': request.user}\n            if course:\n                create_kwargs['course'] = course\n            session = ChatSession.objects.create(**create_kwargs)\n\n        # Persist user message\n        ChatMessage.objects.create(\n            session=session,\n            role='USER',\n            content=message_content\n        )\n\n        # Build conversation history for Anthropic (last 20 messages)\n        history = list(ChatMessage.objects.filter(session=session).order_by('created_at')[:20])\n        anthropic_messages = [\n            {\n                'role': 'user' if msg.role == 'USER' else 'assistant',\n                'content': msg.content\n            }\n            for msg in history\n        ]\n\n        # Build system prompt\n        system_prompt = (\n            'You are a helpful and encouraging AI learning assistant for an online education platform. '\n            'Your role is to help students understand course material, answer their questions clearly, '\n            'explain complex concepts in simple terms, and guide them through their learning journey. '\n            'Be concise, friendly, and accurate. If you are unsure, say so honestly.'\n        )\n        if course:\n            desc_snippet = (course.description or '')[:400]\n            system_prompt += (\n                f' The student is currently studying: \"{course.title}\". '\n                f'Course description: {desc_snippet}'\n            )\n\n        # Validate API key\n        api_key = settings.ANTHROPIC_API_KEY\n        if not api_key:\n            return Response(\n                {'error': 'AI service is not configured. Please contact support.'},\n                status=status.HTTP_503_SERVICE_UNAVAILABLE\n            )\n\n        # Call Claude API\n        try:\n            client = anthropic.Anthropic(api_key=api_key)\n            response = client.messages.create(\n                model='claude-opus-4-6',\n                max_tokens=1024,\n                system=system_prompt,\n                messages=anthropic_messages\n            )\n            ai_reply = response.content[0].text\n        except anthropic.APIConnectionError:\n            return Response(\n                {'error': 'Could not reach AI service. Please try again later.'},\n                status=status.HTTP_503_SERVICE_UNAVAILABLE\n            )\n        except anthropic.APIStatusError as exc:\n            return Response(\n                {'error': f'AI service returned an error: {exc.message}'},\n                status=status.HTTP_503_SERVICE_UNAVAILABLE\n            )\n\n        # Persist AI reply\n        ChatMessage.objects.create(\n            session=session,\n            role='BOT',\n            content=ai_reply\n        )\n\n        # Touch the session updated_at\n        session.save()\n\n        return Response(\n            {'reply': ai_reply, 'session_id': str(session.id)},\n            status=status.HTTP_200_OK\n        )\n\n\nclass ChatbotHistoryView(APIView):\n    \"\"\"GET /api/chatbot/history/?course_id=<slug>\n    Returns: { messages: [...], session_id: str | null }\n    \"\"\"\n    permission_classes = [IsAuthenticated]\n\n    def get(self, request):\n        course_id = request.query_params.get('course_id', None)\n\n        session_filter = {'user': request.user}\n        if course_id and COURSES_AVAILABLE:\n            try:\n                course = Course.objects.get(slug=course_id)\n                session_filter['course'] = course\n            except Course.DoesNotExist:\n                pass\n\n        session = ChatSession.objects.filter(**session_filter).order_by('-updated_at').first()\n        if not session:\n            return Response({'messages': [], 'session_id': None})\n\n        messages = ChatMessage.objects.filter(session=session).order_by('created_at')\n        data = [\n            {\n                'id': str(m.id),\n                'role': m.role,\n                'content': m.content,\n                'created_at': m.created_at.isoformat()\n            }\n            for m in messages\n        ]\n\n        return Response({'messages': data, 'session_id': str(session.id)})\n"
+    },
+
+    {
+      "id": "4",
+      "title": "GitHub Research: Find and evaluate an open-source React chat widget",
+      "priority": "critical",
+      "status": "pending",
+      "description": "Use WebSearch and WebFetch tools to find an open-source, well-designed React chat widget on GitHub. Analyze its code structure, then extract the core patterns (message list rendering, input box, typing indicator) to use as a foundation for LearningChatbot.js.",
+      "agent_instructions": [
+        "Step 1 — Search GitHub using WebSearch with queries like: 'site:github.com react chat widget component floating MIT license lucide' or 'site:github.com open source react chatbot ui component floating bubble'",
+        "Step 2 — Identify 2-3 candidate repositories. Look for ones that are: MIT or Apache 2.0 licensed, use modern React hooks (useState, useEffect, useRef), have a floating bubble/widget pattern, are relatively small and self-contained (single component or a few files)",
+        "Step 3 — Use WebFetch to fetch the raw source code of the best candidate's main chat component file from GitHub (use raw.githubusercontent.com URL)",
+        "Step 4 — Study how the component handles: message state, scroll-to-bottom, typing indicators, input handling (Enter key), open/close toggle",
+        "Step 5 — Extract the best patterns from the GitHub component and use them as inspiration for implementing LearningChatbot.js in Task 5",
+        "Good search queries to try: 'react floating chat widget github', 'react chatbot ui component github floating bubble MIT', 'react-chatbot-kit github', 'chat-bubble react component github'"
+      ],
+      "recommended_repos_to_investigate": [
+        "https://github.com/Wolox/react-chat-widget",
+        "https://github.com/JedWatson/react-select (for dropdown patterns)",
+        "https://github.com/buildwithdan/react-chatbot",
+        "Search: 'react chat widget floating bubble github stars:>100 language:JavaScript'"
+      ],
+      "deliverable": "A clear decision on which GitHub component's patterns to adopt, with extracted code snippets for: (1) message list rendering, (2) floating toggle button, (3) typing indicator animation"
+    },
+
+    {
+      "id": "5",
+      "title": "Frontend: Add chatbotAPI to frontend/src/services/api.js",
+      "priority": "critical",
+      "status": "pending",
+      "description": "Append the chatbotAPI export to the existing api.js. Do NOT modify any existing code — only add the new export block.",
+      "file_to_modify": "c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\frontend\\src\\services\\api.js",
+      "instruction": "Insert the following block BEFORE the final 'export default api;' line:",
+      "code_to_insert": "// Chatbot API\nexport const chatbotAPI = {\n  sendMessage: (message, courseId = null) =>\n    api.post('/chatbot/message/', { message, course_id: courseId }),\n  getHistory: (courseId = null) =>\n    api.get('/chatbot/history/', { params: courseId ? { course_id: courseId } : {} }),\n};\n"
+    },
+
+    {
+      "id": "6",
+      "title": "Frontend: Create LearningChatbot.js adapted from the GitHub research",
+      "priority": "critical",
+      "status": "pending",
+      "description": "Create the chat widget component. Base the code structure on the GitHub repository found in Task 4, but fully adapt it to: use our chatbotAPI from api.js, match the site's CSS custom property design system, use lucide-react icons, and handle auth state via useAuth().",
+      "file_to_create": "c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\frontend\\src\\components\\chat\\LearningChatbot.js",
+      "requirements": [
+        "Import { chatbotAPI } from '../../services/api'",
+        "Import { useAuth } from '../../context/AuthContext'",
+        "Import icons from 'lucide-react': MessageCircle, X, Send, Bot, User, Loader2",
+        "State: isOpen (bool), messages (array), inputValue (string), isLoading (bool), historyLoaded (bool)",
+        "On mount when isOpen becomes true: call chatbotAPI.getHistory(courseId) to load prior messages",
+        "If no history, show welcome message: 'Hi! I am your AI learning assistant. Ask me anything about this course!'",
+        "On send: (1) append user message optimistically, (2) call chatbotAPI.sendMessage(text, courseId), (3) append bot reply, (4) handle errors gracefully",
+        "Typing indicator: animated bouncing dots while isLoading is true",
+        "Auto-scroll to bottom on new messages using useRef + scrollIntoView",
+        "Enter key submits (Shift+Enter for newline)",
+        "If user is not authenticated: show disabled FAB with tooltip 'Login to use the AI assistant'",
+        "Floating position: fixed, bottom: 28px, right: 28px, zIndex: 1000",
+        "Chat window: fixed, bottom: 96px, right: 28px, width: 360px, maxHeight: 520px",
+        "User bubbles: indigo gradient (linear-gradient(135deg, var(--primary), #8b5cf6)), right-aligned",
+        "Bot bubbles: white with border, left-aligned",
+        "Header: indigo gradient with Bot avatar + 'AI Learning Assistant' + 'Powered by Claude'",
+        "Use ONLY inline styles or a <style> tag inside the component — no separate CSS file",
+        "Adapt the exact structural patterns (component architecture, scroll behavior, animation approach) from the GitHub repo found in Task 4"
+      ],
+      "css_animation_for_typing": "@keyframes typingBounce { 0%, 80%, 100% { transform: translateY(0); opacity: 0.4; } 40% { transform: translateY(-6px); opacity: 1; } } — apply to 3 dots with staggered animation-delay: 0s, 0.2s, 0.4s"
+    },
+
+    {
+      "id": "7",
+      "title": "Frontend: Integrate LearningChatbot into CourseDetailPage.js",
+      "priority": "critical",
+      "status": "pending",
+      "description": "Add the LearningChatbot component to CourseDetailPage so it appears as a floating widget when viewing any course.",
+      "file_to_modify": "c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\frontend\\src\\pages\\CourseDetailPage.js",
+      "steps": [
+        {
+          "action": "ADD IMPORT",
+          "instruction": "Add this line to the imports section at the top of the file, after the last existing import:",
+          "code": "import LearningChatbot from '../components/chat/LearningChatbot';"
+        },
+        {
+          "action": "MODIFY JSX",
+          "instruction": "In the return() statement, the outermost element is <div>. Add <LearningChatbot courseId={course.slug} /> as the last child inside that outermost <div>, right before its closing tag. The result should look like:\n\nreturn (\n  <div>\n    {/* Hero Section */}\n    <div className=\"course-detail-hero\">...</div>\n    {/* Course Content */}\n    <div className=\"course-detail-body\">...</div>\n    <LearningChatbot courseId={course.slug} />\n  </div>\n);"
+        }
+      ]
+    },
+
+    {
+      "id": "8",
+      "title": "Backend: Write tests for chatbot views with mocked Anthropic API",
+      "priority": "recommended",
+      "status": "pending",
+      "description": "Replace chatbot/tests.py with comprehensive tests that mock the Anthropic client so no real API calls are made.",
+      "file_to_replace": "c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend\\chatbot\\tests.py",
+      "exact_code": "from unittest.mock import patch, MagicMock\nfrom django.test import TestCase\nfrom django.contrib.auth import get_user_model\nfrom rest_framework.test import APIClient\nfrom rest_framework import status\nfrom .models import ChatSession, ChatMessage\n\nUser = get_user_model()\n\n\nclass ChatbotMessageViewTests(TestCase):\n    def setUp(self):\n        self.client = APIClient()\n        self.user = User.objects.create_user(\n            username='testuser', email='test@example.com', password='testpass123'\n        )\n        self.client.force_authenticate(user=self.user)\n        self.url = '/api/chatbot/message/'\n\n    def test_unauthenticated_returns_401(self):\n        unauth = APIClient()\n        res = unauth.post(self.url, {'message': 'Hello'}, format='json')\n        self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)\n\n    def test_empty_message_returns_400(self):\n        res = self.client.post(self.url, {'message': ''}, format='json')\n        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)\n\n    def test_missing_message_field_returns_400(self):\n        res = self.client.post(self.url, {}, format='json')\n        self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)\n\n    @patch('chatbot.views.anthropic.Anthropic')\n    def test_valid_message_returns_200_and_creates_db_records(self, mock_cls):\n        mock_client = MagicMock()\n        mock_cls.return_value = mock_client\n        mock_response = MagicMock()\n        mock_response.content = [MagicMock(text='This is a test AI reply.')]\n        mock_client.messages.create.return_value = mock_response\n\n        res = self.client.post(self.url, {'message': 'What is a Django model?'}, format='json')\n\n        self.assertEqual(res.status_code, status.HTTP_200_OK)\n        self.assertEqual(res.data['reply'], 'This is a test AI reply.')\n        self.assertIn('session_id', res.data)\n\n        sessions = ChatSession.objects.filter(user=self.user)\n        self.assertEqual(sessions.count(), 1)\n\n        msgs = ChatMessage.objects.filter(session=sessions.first()).order_by('created_at')\n        self.assertEqual(msgs.count(), 2)\n        self.assertEqual(msgs[0].role, 'USER')\n        self.assertEqual(msgs[0].content, 'What is a Django model?')\n        self.assertEqual(msgs[1].role, 'BOT')\n        self.assertEqual(msgs[1].content, 'This is a test AI reply.')\n\n    @patch('chatbot.views.anthropic.Anthropic')\n    def test_second_message_reuses_existing_session(self, mock_cls):\n        mock_client = MagicMock()\n        mock_cls.return_value = mock_client\n        mock_response = MagicMock()\n        mock_response.content = [MagicMock(text='Reply.')]\n        mock_client.messages.create.return_value = mock_response\n\n        self.client.post(self.url, {'message': 'First'}, format='json')\n        self.client.post(self.url, {'message': 'Second'}, format='json')\n\n        self.assertEqual(ChatSession.objects.filter(user=self.user).count(), 1)\n        self.assertEqual(ChatMessage.objects.count(), 4)  # 2 turns * 2 messages each\n\n\nclass ChatbotHistoryViewTests(TestCase):\n    def setUp(self):\n        self.client = APIClient()\n        self.user = User.objects.create_user(\n            username='histuser', email='hist@example.com', password='pass123'\n        )\n        self.client.force_authenticate(user=self.user)\n        self.history_url = '/api/chatbot/history/'\n        self.message_url = '/api/chatbot/message/'\n\n    def test_empty_history_for_new_user(self):\n        res = self.client.get(self.history_url)\n        self.assertEqual(res.status_code, status.HTTP_200_OK)\n        self.assertEqual(res.data['messages'], [])\n        self.assertIsNone(res.data['session_id'])\n\n    @patch('chatbot.views.anthropic.Anthropic')\n    def test_history_returns_messages_after_chat(self, mock_cls):\n        mock_client = MagicMock()\n        mock_cls.return_value = mock_client\n        mock_response = MagicMock()\n        mock_response.content = [MagicMock(text='AI says hi.')]\n        mock_client.messages.create.return_value = mock_response\n\n        self.client.post(self.message_url, {'message': 'Hi'}, format='json')\n\n        res = self.client.get(self.history_url)\n        self.assertEqual(res.status_code, status.HTTP_200_OK)\n        self.assertEqual(len(res.data['messages']), 2)\n        self.assertEqual(res.data['messages'][0]['role'], 'USER')\n        self.assertEqual(res.data['messages'][1]['role'], 'BOT')\n        self.assertIsNotNone(res.data['session_id'])\n"
+    },
+
+    {
+      "id": "9",
+      "title": "Run migrations and verify the setup",
+      "priority": "critical",
+      "status": "pending",
+      "description": "Run Django migrations to ensure the ChatSession course FK is properly applied, then do a quick sanity check.",
+      "steps": [
+        {
+          "action": "SHELL",
+          "command": "cd c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend && python manage.py migrate",
+          "expected_output": "All migrations applied successfully"
+        },
+        {
+          "action": "SHELL",
+          "command": "cd c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend && python manage.py check",
+          "expected_output": "System check identified no issues (0 silenced)."
+        },
+        {
+          "action": "SHELL",
+          "command": "cd c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend && python manage.py test chatbot -v 2",
+          "expected_output": "Ran 7 tests ... OK"
+        }
+      ]
+    }
+  ],
+
+  "execution_order": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+
+  "critical_reminders_for_agent": [
+    "Task 4 (GitHub Research) MUST be completed before Task 6 (LearningChatbot.js) — the component design should directly reflect what was found on GitHub",
+    "When fetching GitHub raw files, use raw.githubusercontent.com URLs, not the github.com HTML page",
+    "The chatbot model in views.py uses 'claude-opus-4-6' — do NOT change this model name",
+    "The existing api.js interceptor already attaches the JWT Bearer token — chatbotAPI calls will be authenticated automatically",
+    "Do NOT create a separate CSS file for the chatbot — use inline styles or a <style> tag inside the component",
+    "The frontend currently has NO chat/ directory under components/ — you must create it",
+    "After all code is written, inform the user they need to: (1) create .env with ANTHROPIC_API_KEY, (2) run pip install anthropic python-dotenv, (3) run python manage.py migrate, then start both servers"
+  ],
+
+  "post_implementation_checklist": [
+    "1. Create backend/.env with: ANTHROPIC_API_KEY=sk-ant-your-actual-key",
+    "2. pip install anthropic python-dotenv",
+    "3. python manage.py migrate",
+    "4. python manage.py test chatbot -v 2  (should show 7 tests passing)",
+    "5. python manage.py runserver  (backend on port 8000)",
+    "6. npm start  (frontend on port 3000, in the frontend/ directory)",
+    "7. Open http://localhost:3000 and log in",
+    "8. Navigate to /courses/fullstack-react-django",
+    "9. A purple chat bubble appears bottom-right — click it",
+    "10. Type 'Explain Django models' — a Claude response should appear",
+    "11. Refresh the page and reopen chat — history should persist"
+  ],
+
+  "verification": {
+    "test_command": "cd c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend && python manage.py test chatbot -v 2",
+    "backend_server": "cd c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\backend && python manage.py runserver",
+    "frontend_server": "cd c:\\Users\\saivi\\OneDrive\\Desktop\\Agile_project\\frontend && npm start",
+    "manual_curl_test": "curl -X POST http://localhost:8000/api/chatbot/message/ -H 'Authorization: Bearer <JWT>' -H 'Content-Type: application/json' -d '{\"message\": \"What is a REST API?\", \"course_id\": \"fullstack-react-django\"}'"
+  }
+}
