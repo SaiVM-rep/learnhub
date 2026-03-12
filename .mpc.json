@@ -1,0 +1,15 @@
+{
+    "mcpServers": {
+        "dbhub": {
+            "command": "npx",
+            "args": [
+                "-y",
+                "@bytebase/dbhub@latest",
+                "--transport",
+                "stdio",
+                "--dsn",
+                "mysql://username:password@localhost:3306/your_database_name"
+            ]
+        }
+    }
+}
