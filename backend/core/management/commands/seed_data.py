@@ -128,7 +128,7 @@ class Command(BaseCommand):
                 'slug': 'aws-cloud-devops',
                 'description': 'Master cloud computing with AWS services including EC2, S3, Lambda, RDS, and more. Learn CI/CD pipelines, infrastructure as code with Terraform, and container orchestration with Kubernetes.',
                 'short_description': 'Design and deploy scalable cloud solutions on AWS.',
-                'instructor': instructor1,
+                'instructor': instructor2,
                 'category': categories['cloud-computing'],
                 'price': 3499.00,
                 'duration_hours': 52,
@@ -148,6 +148,7 @@ class Command(BaseCommand):
         ]
 
         for course_data in courses_data:
+            course_data['is_published'] = True
             course, created = Course.objects.get_or_create(
                 slug=course_data['slug'], defaults=course_data
             )

@@ -7,6 +7,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('core.urls')),
     path('api/courses/', include('courses.urls')),
+    path('api/instructor/', include('courses.instructor_urls')),
+    path('api/enrollments/', include('courses.enrollment_urls')),
     path('api/chatbot/', include('chatbot.urls')),
 ]
 

@@ -1,0 +1,43 @@
+# Environment & secrets
+.env
+*.env
+backend/.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyc
+*.pyd
+db.sqlite3
+*.sqlite3
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (frontend submodule has its own .gitignore)
+node_modules/
+
+# Compiled files
+*.cpython-*.pyc
+
+# Temp/log files
+*.log
+git_diff.txt
+git_diff_frontend.txt
+git_log.txt
+git_status.txt
+git_status_frontend.txt
+log_diff.txt

@@ -38,6 +38,7 @@ class Course(models.Model):
         ('ADVANCED', 'Advanced'),
     ], default='BEGINNER')
     is_active = models.BooleanField(default=True)
+    is_published = models.BooleanField(default=False)
     is_featured = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -57,6 +58,20 @@ class Course(models.Model):
     def average_rating(self):
         avg = self.reviews.aggregate(models.Avg('rating'))['rating__avg']
         return round(avg, 1) if avg else 0
+
+    @property
+    def total_lessons(self):
+        return Lesson.objects.filter(module__course=self).count()
+
+    @property
+    def total_duration_minutes(self):
+        return Lesson.objects.filter(module__course=self).aggregate(
+            total=models.Sum('duration_minutes')
+        )['total'] or 0
+
+    @property
+    def revenue(self):
+        return float(self.price) * self.enrollment_count
 
 
 class Module(models.Model):
