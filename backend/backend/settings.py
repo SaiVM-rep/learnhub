@@ -135,3 +135,6 @@ EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
 
 # Google Gemini AI API
 GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
+
+# Groq AI API
+GROQ_API_KEY = os.environ.get('GROQ_API_KEY', '')

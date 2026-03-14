@@ -19,7 +19,7 @@ class CourseListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        queryset = Course.objects.filter(is_active=True).select_related('instructor', 'category')
+        queryset = Course.objects.filter(is_active=True, is_published=True).select_related('instructor', 'category')
 
         search = self.request.query_params.get('search', '')
         if search:
