@@ -4,8 +4,9 @@ from .models import Category, Course, Module, Lesson, Enrollment, Review
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug']
+    list_display = ['name', 'slug', 'color', 'icon']
     prepopulated_fields = {'slug': ('name',)}
+    fields = ['name', 'slug', 'description', 'icon', 'color']
 
 
 class ModuleInline(admin.TabularInline):

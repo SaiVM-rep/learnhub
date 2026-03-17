@@ -12,6 +12,17 @@ class IsInstructor(BasePermission):
         )
 
 
+class IsAdmin(BasePermission):
+    """Allow access only to users with role='ADMIN'."""
+
+    def has_permission(self, request, view):
+        return (
+            request.user
+            and request.user.is_authenticated
+            and request.user.role == 'ADMIN'
+        )
+
+
 class IsInstructorOwner(BasePermission):
     """Allow access only if the instructor owns the resource."""
 

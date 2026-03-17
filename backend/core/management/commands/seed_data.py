@@ -62,12 +62,12 @@ class Command(BaseCommand):
 
         # Create categories
         categories_data = [
-            {'name': 'Web Development', 'slug': 'web-development', 'icon': 'code'},
-            {'name': 'Data Science', 'slug': 'data-science', 'icon': 'bar-chart'},
-            {'name': 'Machine Learning', 'slug': 'machine-learning', 'icon': 'cpu'},
-            {'name': 'Mobile Development', 'slug': 'mobile-development', 'icon': 'smartphone'},
-            {'name': 'Cloud Computing', 'slug': 'cloud-computing', 'icon': 'cloud'},
-            {'name': 'Cybersecurity', 'slug': 'cybersecurity', 'icon': 'shield'},
+            {'name': 'Web Development', 'slug': 'web-development', 'icon': 'code', 'color': 'linear-gradient(135deg, #6366f1, #8b5cf6)'},
+            {'name': 'Data Science', 'slug': 'data-science', 'icon': 'bar-chart', 'color': 'linear-gradient(135deg, #0ea5e9, #06b6d4)'},
+            {'name': 'Machine Learning', 'slug': 'machine-learning', 'icon': 'cpu', 'color': 'linear-gradient(135deg, #f59e0b, #f97316)'},
+            {'name': 'Mobile Development', 'slug': 'mobile-development', 'icon': 'smartphone', 'color': 'linear-gradient(135deg, #10b981, #14b8a6)'},
+            {'name': 'Cloud Computing', 'slug': 'cloud-computing', 'icon': 'cloud', 'color': 'linear-gradient(135deg, #ef4444, #f97316)'},
+            {'name': 'Cybersecurity', 'slug': 'cybersecurity', 'icon': 'shield', 'color': 'linear-gradient(135deg, #8b5cf6, #ec4899)'},
         ]
         categories = {}
         for cat_data in categories_data:
