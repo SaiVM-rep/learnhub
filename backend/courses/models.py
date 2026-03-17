@@ -9,6 +9,11 @@ class Category(models.Model):
     slug = models.SlugField(max_length=100, unique=True)
     description = models.TextField(blank=True)
     icon = models.CharField(max_length=50, blank=True)
+    color = models.CharField(
+        max_length=100, blank=True,
+        default='linear-gradient(135deg, #6366f1, #8b5cf6)',
+        help_text='CSS gradient for course cards, e.g. linear-gradient(135deg, #6366f1, #8b5cf6)'
+    )
 
     class Meta:
         db_table = 'categories'

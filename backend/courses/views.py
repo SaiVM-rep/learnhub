@@ -5,6 +5,7 @@ from .serializers import (
     CategorySerializer, CourseListSerializer, CourseDetailSerializer,
     EnrollmentSerializer
 )
+from .permissions import IsAdmin
 
 
 class CategoryListView(generics.ListAPIView):
@@ -64,3 +65,21 @@ class MyEnrollmentsView(generics.ListAPIView):
         return Enrollment.objects.filter(
             student=self.request.user, is_active=True
         ).select_related('course__instructor', 'course__category')
+
+
+class AdminCategoryCreateView(generics.CreateAPIView):
+    serializer_class = CategorySerializer
+    permission_classes = [IsAdmin]
+
+
+class AdminCategoryUpdateView(generics.UpdateAPIView):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [IsAdmin]
+    lookup_field = 'pk'
+
+
+class AdminCategoryDeleteView(generics.DestroyAPIView):
+    queryset = Category.objects.all()
+    permission_classes = [IsAdmin]
+    lookup_field = 'pk'

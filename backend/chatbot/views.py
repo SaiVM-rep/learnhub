@@ -68,12 +68,11 @@ class ChatbotMessageView(APIView):
         
         # Build system instruction
         system_instruction = (
-            'You are a helpful and encouraging AI learning assistant for an '
-            'online education platform. Your role is to help students '
-            'understand course material, answer their questions clearly, '
-            'explain complex concepts in simple terms, and guide them through '
-            'their learning journey. Be concise, friendly, and accurate. '
-            'If you are unsure, say so honestly.'
+            'You are a chill, friendly AI study buddy on a learning platform. '
+            'Keep it casual and fun — answer every question in 1-2 short sentences max, '
+            'like you\'re texting a friend. No paragraphs, no bullet points, no essays. '
+            'If a topic is complex, simplify it into something easy to get. '
+            'If you don\'t know, just say so honestly.'
         )
         if course:
             desc_snippet = (course.description or '')[:400]
@@ -112,8 +111,8 @@ class ChatbotMessageView(APIView):
             completion = client.chat.completions.create(
                 model="llama-3.3-70b-versatile",
                 messages=groq_messages,
-                temperature=0.7,
-                max_tokens=1024,
+                temperature=0.8,
+                max_tokens=150,
             )
             ai_reply = completion.choices[0].message.content
         except Exception as exc:

@@ -6,7 +6,7 @@ from core.serializers import UserSerializer
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name', 'slug', 'description', 'icon']
+        fields = ['id', 'name', 'slug', 'description', 'icon', 'color']
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -30,6 +30,7 @@ class ModuleSerializer(serializers.ModelSerializer):
 class CourseListSerializer(serializers.ModelSerializer):
     instructor_name = serializers.SerializerMethodField()
     category_name = serializers.SerializerMethodField()
+    category_color = serializers.SerializerMethodField()
     enrollment_count = serializers.ReadOnlyField()
     average_rating = serializers.ReadOnlyField()
 
@@ -37,8 +38,8 @@ class CourseListSerializer(serializers.ModelSerializer):
         model = Course
         fields = [
             'id', 'title', 'slug', 'short_description', 'instructor',
-            'instructor_name', 'category', 'category_name', 'price',
-            'thumbnail', 'duration_hours', 'difficulty', 'is_featured',
+            'instructor_name', 'category', 'category_name', 'category_color',
+            'price', 'thumbnail', 'duration_hours', 'difficulty', 'is_featured',
             'enrollment_count', 'average_rating', 'created_at'
         ]
 
@@ -47,6 +48,9 @@ class CourseListSerializer(serializers.ModelSerializer):
 
     def get_category_name(self, obj):
         return obj.category.name if obj.category else None
+
+    def get_category_color(self, obj):
+        return obj.category.color if obj.category else None
 
 
 class CourseDetailSerializer(serializers.ModelSerializer):
