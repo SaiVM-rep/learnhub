@@ -1,0 +1,4 @@
+run backend : cd backend
+python manage.py runserver
+run frontend : cd frontend
+npm start

@@ -15,7 +15,9 @@ from .instructor_views import (
     InstructorLessonDeleteView,
     EnrollmentCreateView,
     EnrollmentCheckView,
+    VideoMetadataView,
 )
+from assessments.urls import instructor_urlpatterns as quiz_instructor_urls
 
 urlpatterns = [
     # Dashboard
@@ -40,7 +42,10 @@ urlpatterns = [
     path('sections/<uuid:module_pk>/lessons/', InstructorLessonCreateView.as_view(), name='instructor-lesson-create'),
     path('lessons/<uuid:pk>/', InstructorLessonUpdateView.as_view(), name='instructor-lesson-update'),
     path('lessons/<uuid:pk>/delete/', InstructorLessonDeleteView.as_view(), name='instructor-lesson-delete'),
-]
+
+    # YouTube duration auto-detect
+    path('video-metadata/', VideoMetadataView.as_view(), name='instructor-video-metadata'),
+] + quiz_instructor_urls
 
 # Enrollment endpoints (separate — not under /instructor/ prefix)
 enrollment_urlpatterns = [
