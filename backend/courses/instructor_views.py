@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 
 from .models import Course, Module, Lesson, Enrollment
 from .permissions import IsInstructor, IsInstructorOwner
+from .utils import get_youtube_duration
 from .instructor_serializers import (
     InstructorCourseListSerializer,
     InstructorCourseCreateSerializer,
@@ -221,6 +222,27 @@ class InstructorLessonDeleteView(APIView):
         )
         lesson.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+# ─── Video Metadata (YouTube duration auto-detect) ─────────────────
+
+class VideoMetadataView(APIView):
+    permission_classes = [IsInstructor]
+
+    def post(self, request):
+        url = request.data.get('video_url', '').strip()
+        if not url:
+            return Response(
+                {'error': 'video_url is required.'},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        result = get_youtube_duration(url)
+        if 'error' in result:
+            return Response(
+                {'error': result['error']},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return Response(result)
 
 
 # ─── Enrollment endpoints (for students) ───────────────────────────

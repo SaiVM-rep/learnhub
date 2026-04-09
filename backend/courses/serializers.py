@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Course, Module, Lesson, Enrollment, Review
+from .models import Category, Course, Module, Lesson, Enrollment, Review, LessonProgress
 from core.serializers import UserSerializer
 
 
@@ -12,7 +12,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
-        fields = ['id', 'title', 'lesson_type', 'duration_minutes', 'order', 'is_preview', 'video_url']
+        fields = ['id', 'title', 'lesson_type', 'duration_minutes', 'order', 'is_preview', 'video_url', 'content']
 
 
 class ModuleSerializer(serializers.ModelSerializer):
@@ -100,3 +100,10 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     def get_student_name(self, obj):
         return obj.student.get_full_name()
+
+
+class LessonProgressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LessonProgress
+        fields = ['id', 'lesson', 'is_completed', 'completed_at', 'watched_duration']
+        read_only_fields = ['id', 'completed_at']

@@ -150,3 +150,21 @@ class Review(models.Model):
     class Meta:
         db_table = 'reviews'
         unique_together = ['course', 'student']
+
+
+class LessonProgress(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    student = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='lesson_progress'
+    )
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='progress_records')
+    is_completed = models.BooleanField(default=False)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    watched_duration = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        db_table = 'lesson_progress'
+        unique_together = ['student', 'lesson']
+
+    def __str__(self):
+        return f"{self.student.email} - {self.lesson.title} ({'Done' if self.is_completed else 'In Progress'})"

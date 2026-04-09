@@ -10,6 +10,7 @@ urlpatterns = [
     path('api/instructor/', include('courses.instructor_urls')),
     path('api/enrollments/', include('courses.enrollment_urls')),
     path('api/chatbot/', include('chatbot.urls')),
+    path('api/analytics/', include('analytics.urls')),
 ]
 
 if settings.DEBUG:

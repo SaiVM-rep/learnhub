@@ -65,6 +65,8 @@ frontend/src/
 | POST | `/logout/` | Auth | Blacklist refresh token |
 | POST | `/refresh/` | AllowAny | Refresh access token |
 | GET/PATCH | `/profile/` | Auth | View/update profile |
+| POST | `/otp/request/` | AllowAny | Request OTP via email (10 min expiry) |
+| POST | `/otp/verify/` | AllowAny | Verify OTP, returns JWT tokens |
 
 ### Courses (`/api/courses/`)
 | Method | Path | Permission | Purpose |
@@ -126,6 +128,27 @@ frontend/src/
 
 ### User
 `id(UUID), email(unique), username, first_name, last_name, role(STUDENT/INSTRUCTOR/ADMIN), phone, avatar, is_active`
+
+### OTPToken
+`id(UUID), user(FK), code_hash(SHA-256 + email salt), created_at, expires_at(10 min), is_used, attempts(max 5)`
+
+### LessonProgress
+`id(UUID), student(FK), lesson(FK), is_completed, completed_at, watched_duration` (unique: student+lesson)
+
+### Test (assessments app)
+`id(UUID), course(FK), title, duration_minutes, is_active` (max 5 per course)
+
+### Question
+`id(UUID), test(FK), text, topic_tag, difficulty(EASY/MEDIUM/HARD), order`
+
+### MCQOption
+`id(UUID), question(FK), text, is_correct`
+
+### TestAttempt
+`id(UUID), test(FK), student(FK), started_at, submitted_at, score, is_completed`
+
+### Response
+`id(UUID), attempt(FK), question(FK), selected_option(FK), is_correct`
 
 ## Frontend Routes
 | Path | Component | Protection |
@@ -191,6 +214,27 @@ frontend/src/
 6. **Django admin** - CategoryAdmin now shows and allows editing color field
 7. **Seed data** - Categories now include color values
 8. **Frontend API service** - Added `adminCategoryAPI` with create/update/delete methods
+
+### Session 4 - Quiz System, Progress Tracking & Analytics
+1. **MCQ Quiz system** - assessments app: Test, Question, MCQOption, TestAttempt, Response models; up to 5 quizzes per course, 10 questions each; auto-graded on submit
+2. **Quiz instructor builder** - CourseBuilderPage quiz form with 10-question editor, create/edit/delete
+3. **QuizPage** - Student quiz page with countdown timer, radio MCQs, results with per-question breakdown
+4. **LessonProgress model** - Per-lesson completion tracking; recalculates Enrollment.progress on mark done
+5. **CourseDetailPage rewrite** - Tick marks on completed lessons, Mark Done button, progress bar, quizzes section
+6. **DashboardPage rewrite** - All charts now use real data from analyticsAPI.getDashboard()
+7. **Analytics endpoint** - GET /api/analytics/dashboard/ returns stats, course_progress, quiz_scores, recent_activity
+8. **Bug fix** - "In Progress" was always 0; fixed by using Enrollment.progress field instead of LessonProgress.is_completed=False
+
+### Session 5 - YouTube Duration Auto-Detection
+1. **yt-dlp integration** - backend/courses/utils.py with get_youtube_duration() using yt-dlp (no API key needed)
+2. **VideoMetadataView** - POST /api/instructor/video-metadata/ returns duration_minutes + title
+3. **CourseBuilderPage UX** - YouTube URL auto-detects duration on blur; shows Fetching.../success/warning message
+
+### Session 6 - OTP Login Feature
+1. **Gmail SMTP configured** - backend/.env updated with real Gmail credentials
+2. **OTP API methods** - Added requestOTP/verifyOTP to authAPI in frontend/src/services/api.js
+3. **AuthContext OTP methods** - Added requestOTP() and verifyOTP() with full JWT token handling
+4. **LoginPage OTP UI** - "Sign in with OTP instead" toggle; 2-step flow: email entry → 6-digit code boxes; auto-advance, backspace, paste support; 60s resend countdown; email masking; auto-submit on last digit
 
 ### Chatbot System Prompt
 - Casual, friendly "AI study buddy" persona
