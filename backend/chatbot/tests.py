@@ -30,14 +30,14 @@ class ChatbotMessageViewTests(TestCase):
         res = self.client.post(self.url, {}, format='json')
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
-    @patch('chatbot.views.genai')
-    def test_valid_message_returns_200_and_creates_db_records(self, mock_genai):
-        # Mock: genai.Client().models.generate_content()
+    @patch('chatbot.views.Groq')
+    def test_valid_message_returns_200_and_creates_db_records(self, mock_groq):
+        # Mock: Groq client
         mock_client = MagicMock()
-        mock_genai.Client.return_value = mock_client
-        mock_response = MagicMock()
-        mock_response.text = 'This is a test AI reply from Gemini.'
-        mock_client.models.generate_content.return_value = mock_response
+        mock_groq.return_value = mock_client
+        mock_completion = MagicMock()
+        mock_completion.choices[0].message.content = 'This is a test AI reply from Gemini.'
+        mock_client.chat.completions.create.return_value = mock_completion
 
         res = self.client.post(
             self.url, {'message': 'What is a Django model?'}, format='json'
@@ -58,13 +58,13 @@ class ChatbotMessageViewTests(TestCase):
         self.assertEqual(msgs[1].role, 'BOT')
         self.assertEqual(msgs[1].content, 'This is a test AI reply from Gemini.')
 
-    @patch('chatbot.views.genai')
-    def test_second_message_reuses_existing_session(self, mock_genai):
+    @patch('chatbot.views.Groq')
+    def test_second_message_reuses_existing_session(self, mock_groq):
         mock_client = MagicMock()
-        mock_genai.Client.return_value = mock_client
-        mock_response = MagicMock()
-        mock_response.text = 'Reply.'
-        mock_client.models.generate_content.return_value = mock_response
+        mock_groq.return_value = mock_client
+        mock_completion = MagicMock()
+        mock_completion.choices[0].message.content = 'Reply.'
+        mock_client.chat.completions.create.return_value = mock_completion
 
         self.client.post(self.url, {'message': 'First'}, format='json')
         self.client.post(self.url, {'message': 'Second'}, format='json')
@@ -89,13 +89,13 @@ class ChatbotHistoryViewTests(TestCase):
         self.assertEqual(res.data['messages'], [])
         self.assertIsNone(res.data['session_id'])
 
-    @patch('chatbot.views.genai')
-    def test_history_returns_messages_after_chat(self, mock_genai):
+    @patch('chatbot.views.Groq')
+    def test_history_returns_messages_after_chat(self, mock_groq):
         mock_client = MagicMock()
-        mock_genai.Client.return_value = mock_client
-        mock_response = MagicMock()
-        mock_response.text = 'AI says hi.'
-        mock_client.models.generate_content.return_value = mock_response
+        mock_groq.return_value = mock_client
+        mock_completion = MagicMock()
+        mock_completion.choices[0].message.content = 'AI says hi.'
+        mock_client.chat.completions.create.return_value = mock_completion
 
         self.client.post(self.message_url, {'message': 'Hi'}, format='json')
 
