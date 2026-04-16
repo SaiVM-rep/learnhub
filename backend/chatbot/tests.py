@@ -1,5 +1,5 @@
 from unittest.mock import patch, MagicMock
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 from rest_framework import status
@@ -8,6 +8,7 @@ from .models import ChatSession, ChatMessage
 User = get_user_model()
 
 
+@override_settings(GROQ_API_KEY='test-key')
 class ChatbotMessageViewTests(TestCase):
     def setUp(self):
         self.client = APIClient()
@@ -73,6 +74,7 @@ class ChatbotMessageViewTests(TestCase):
         self.assertEqual(ChatMessage.objects.count(), 4)  # 2 user + 2 bot
 
 
+@override_settings(GROQ_API_KEY='test-key')
 class ChatbotHistoryViewTests(TestCase):
     def setUp(self):
         self.client = APIClient()
