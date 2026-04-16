@@ -1,0 +1,35 @@
+# Version control
+.git
+.gitignore
+
+# Python artifacts
+__pycache__
+*.py[cod]
+*.pyo
+*.pyc
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Environment secrets (injected via docker-compose)
+.env
+
+# Database (not used in Docker — using PostgreSQL)
+db.sqlite3
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Media uploads (should use persistent volumes)
+media/
+
+# Misc
+*.log
+Dockerfile
+.dockerignore
