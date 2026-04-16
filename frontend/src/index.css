@@ -1,0 +1,416 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --primary-light: #818cf8;
+  --primary-50: #eef2ff;
+  --primary-100: #e0e7ff;
+  --secondary: #0ea5e9;
+  --secondary-dark: #0284c7;
+  --accent: #f59e0b;
+  --accent-light: #fbbf24;
+  --success: #10b981;
+  --success-light: #d1fae5;
+  --warning: #f59e0b;
+  --warning-light: #fef3c7;
+  --danger: #ef4444;
+  --danger-light: #fee2e2;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --white: #ffffff;
+  --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.05);
+  --shadow: 0 1px 3px 0 rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -2px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);
+  --radius-sm: 6px;
+  --radius: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+}
+
+/* Dark mode: invert backgrounds and text only, keep accent/UI colors */
+[data-theme="dark"] {
+  --gray-50: #111827;
+  --gray-100: #1a2234;
+  --gray-200: #283344;
+  --gray-300: #374151;
+  --gray-400: #6b7280;
+  --gray-500: #9ca3af;
+  --gray-600: #d1d5db;
+  --gray-700: #e5e7eb;
+  --gray-800: #f3f4f6;
+  --gray-900: #f9fafb;
+  --white: #1a2234;
+  --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.3);
+  --shadow: 0 1px 3px 0 rgba(0,0,0,0.4), 0 1px 2px -1px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.4), 0 2px 4px -2px rgba(0,0,0,0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.4), 0 4px 6px -4px rgba(0,0,0,0.3);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.4), 0 8px 10px -6px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] body {
+  color: #e5e7eb;
+  background-color: #0f172a;
+}
+
+/* Navbar */
+[data-theme="dark"] .navbar {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border-bottom-color: #283344 !important;
+}
+
+/* Cards & containers */
+[data-theme="dark"] .stat-card,
+[data-theme="dark"] .dashboard-card,
+[data-theme="dark"] .course-card,
+[data-theme="dark"] .builder-modal,
+[data-theme="dark"] .feature-card,
+[data-theme="dark"] .course-module,
+[data-theme="dark"] .auth-card,
+[data-theme="dark"] .auth-demo {
+  background: #1a2234 !important;
+  border-color: #283344 !important;
+}
+
+/* Course detail sidebar */
+[data-theme="dark"] .course-detail-sidebar {
+  background: #1a2234 !important;
+  border-color: #283344 !important;
+}
+
+[data-theme="dark"] .course-detail-sidebar-body {
+  background: #1a2234;
+}
+
+[data-theme="dark"] .course-detail-price {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .course-detail-features {
+  border-top-color: #283344;
+}
+
+[data-theme="dark"] .course-detail-feature {
+  color: #d1d5db;
+}
+
+/* Course detail body section */
+[data-theme="dark"] .course-detail-body {
+  background: #0f172a;
+}
+
+[data-theme="dark"] .course-detail-section h2 {
+  color: #f9fafb;
+}
+
+/* Course module accordion on detail page */
+[data-theme="dark"] .course-module {
+  border-color: #283344;
+}
+
+[data-theme="dark"] .course-module-header {
+  background: #1a2234;
+}
+
+[data-theme="dark"] .course-module-header:hover {
+  background: #222d3f;
+}
+
+[data-theme="dark"] .course-module-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .course-module-lessons {
+  background: #111827;
+}
+
+[data-theme="dark"] .course-lesson {
+  border-bottom-color: #283344;
+}
+
+/* Forms */
+[data-theme="dark"] .form-input,
+[data-theme="dark"] select.form-input,
+[data-theme="dark"] textarea.form-input {
+  background: #111827;
+  border-color: #283344;
+  color: #e5e7eb;
+}
+
+[data-theme="dark"] .form-input:focus {
+  border-color: var(--primary);
+}
+
+[data-theme="dark"] .form-input option {
+  background: #1a2234;
+  color: #e5e7eb;
+}
+
+/* Courses page filters */
+[data-theme="dark"] .courses-filters select,
+[data-theme="dark"] .courses-filters input {
+  background: #111827 !important;
+  border-color: #283344 !important;
+  color: #e5e7eb !important;
+}
+
+/* Course cards on listing page */
+[data-theme="dark"] .course-card-body {
+  background: #1a2234;
+}
+
+[data-theme="dark"] .course-card-title {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .course-card-description {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .course-card-footer {
+  border-top-color: #283344;
+}
+
+[data-theme="dark"] .course-card-price {
+  color: #f9fafb;
+}
+
+/* Homepage sections */
+[data-theme="dark"] .features-section,
+[data-theme="dark"] .courses-section,
+[data-theme="dark"] .cta-section {
+  background: #0f172a;
+}
+
+[data-theme="dark"] .section-title {
+  color: #f9fafb;
+}
+
+[data-theme="dark"] .section-description {
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .feature-card h3 {
+  color: #f3f4f6;
+}
+
+[data-theme="dark"] .feature-card p {
+  color: #9ca3af;
+}
+
+/* Builder */
+[data-theme="dark"] .builder-module {
+  border-color: #283344;
+}
+
+[data-theme="dark"] .builder-module-header {
+  background: #111827;
+}
+
+[data-theme="dark"] .builder-module-header:hover {
+  background: #1a2234;
+}
+
+[data-theme="dark"] .builder-lessons {
+  background: #1a2234;
+}
+
+[data-theme="dark"] .builder-lesson {
+  border-bottom-color: #283344;
+}
+
+[data-theme="dark"] .builder-small-btn {
+  background: #283344;
+  color: #9ca3af;
+}
+
+[data-theme="dark"] .builder-add-section {
+  background: rgba(99, 102, 241, 0.1);
+}
+
+[data-theme="dark"] .builder-add-lesson-btn {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.25);
+}
+
+/* Instructor table */
+[data-theme="dark"] .instructor-table tbody tr:hover {
+  background: #111827;
+}
+
+[data-theme="dark"] .instructor-table tbody tr {
+  border-bottom-color: #283344;
+}
+
+[data-theme="dark"] .instructor-table thead tr {
+  border-bottom-color: #283344;
+}
+
+/* Buttons */
+[data-theme="dark"] .btn-secondary,
+[data-theme="dark"] .btn-ghost {
+  color: #e5e7eb;
+  border-color: #374151;
+}
+
+[data-theme="dark"] .btn-secondary:hover,
+[data-theme="dark"] .btn-ghost:hover {
+  background: #283344;
+}
+
+/* Auth pages */
+[data-theme="dark"] .auth-page {
+  background: #0f172a !important;
+}
+
+/* Enrollment confirmation modal */
+[data-theme="dark"] .course-detail-body div[style*="background: white"],
+[data-theme="dark"] div[style*="background: 'white'"] {
+  background: #1a2234 !important;
+}
+
+/* Footer */
+[data-theme="dark"] .footer {
+  background: #0a0f1a;
+}
+
+/* Scrollbar */
+[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #111827;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #374151;
+}
+
+/* Chatbot */
+[data-theme="dark"] .chatbot-messages {
+  background: #111827;
+}
+
+[data-theme="dark"] .chatbot-input-area {
+  background: #1a2234;
+  border-top-color: #283344;
+}
+
+[data-theme="dark"] .chatbot-input {
+  background: #111827;
+  color: #e5e7eb;
+  border-color: #283344;
+}
+
+[data-theme="dark"] .chatbot-message.bot .chatbot-bubble {
+  background: #283344;
+  border-color: #374151;
+  color: #e5e7eb;
+}
+
+/* Recharts tooltips & chart elements */
+[data-theme="dark"] .recharts-default-tooltip {
+  background: #1a2234 !important;
+  border-color: #283344 !important;
+  color: #e5e7eb !important;
+}
+
+[data-theme="dark"] .recharts-tooltip-item {
+  color: #e5e7eb !important;
+}
+
+[data-theme="dark"] .recharts-tooltip-label {
+  color: #f3f4f6 !important;
+}
+
+[data-theme="dark"] .recharts-cartesian-grid line {
+  stroke: #283344;
+}
+
+[data-theme="dark"] .recharts-polar-grid line,
+[data-theme="dark"] .recharts-polar-grid circle,
+[data-theme="dark"] .recharts-polar-grid polygon {
+  stroke: #283344;
+}
+
+/* Tooltips & misc white containers in inline styles */
+[data-theme="dark"] .section-badge {
+  background: #283344;
+  color: #d1d5db;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--gray-800);
+  background-color: var(--gray-50);
+  line-height: 1.6;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: inherit;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  outline: none;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--gray-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray-300);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gray-400);
+}
+
+/* Utility classes */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.page-content {
+  min-height: calc(100vh - 72px);
+  padding-top: 24px;
+  padding-bottom: 48px;
+}
