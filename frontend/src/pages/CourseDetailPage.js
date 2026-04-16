@@ -63,7 +63,7 @@ const CourseDetailPage = () => {
       setLoading(false);
     };
     fetchCourse();
-  }, [slug, isAuthenticated]);
+  }, [slug, isAuthenticated, user?.id]);
 
   const toggleModule = (moduleId) => {
     setExpandedModules(prev => ({ ...prev, [moduleId]: !prev[moduleId] }));

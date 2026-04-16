@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { courseAPI, analyticsAPI } from '../services/api';
 import {
-  BookOpen, Award, Clock, TrendingUp, Star, Play,
+  BookOpen, Award, Clock, TrendingUp, Star,
   CheckCircle, BarChart3, ClipboardList, AlertCircle
 } from 'lucide-react';
 import {

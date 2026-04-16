@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { quizAPI, courseAPI } from '../services/api';
+import { useParams, Link } from 'react-router-dom';
+import { quizAPI } from '../services/api';
 import {
   Clock, CheckCircle, XCircle, ArrowLeft, Award, AlertCircle
 } from 'lucide-react';
 
 const QuizPage = () => {
   const { slug, quizId } = useParams();
-  const navigate = useNavigate();
+
   const [phase, setPhase] = useState('loading'); // loading, ready, taking, submitted
   const [quiz, setQuiz] = useState(null);
   const [attempt, setAttempt] = useState(null);
